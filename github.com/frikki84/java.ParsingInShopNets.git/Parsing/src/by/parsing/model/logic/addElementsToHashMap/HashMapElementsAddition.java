@@ -11,7 +11,7 @@ public class HashMapElementsAddition {
 	
 	//add element to the main resultHashMap after the first parsing
 	public static HashMap<String, ArrayList<HashMap<String, String>>> addElementsToMainResultHashMap(
-			HashMap<String, String> sourceHashMap, HashMap<String, ArrayList<HashMap<String, String>>> resultHashMap,
+			ArrayList<ArrayList<String>> sourceArrayList, HashMap<String, ArrayList<HashMap<String, String>>> resultHashMap,
 			ShopList list) {
 
 		for (Map.Entry<String, String> entry : sourceHashMap.entrySet()) {

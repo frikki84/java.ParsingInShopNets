@@ -23,7 +23,7 @@ import by.parsing.view.ConsolePrinter;
 public class Controller {
 	public static void main(String[] args) {
 
-		Hypermall hypermall = new Hypermall();
+		//Hypermall hypermall = new Hypermall();
 
 		OstrovChistoty chistoty = new OstrovChistoty();
 
@@ -32,7 +32,7 @@ public class Controller {
 		ShopList list = new ShopList();
 		list.addShopNetInList(chistoty);
 		list.addShopNetInList(mila);
-		list.addShopNetInList(hypermall);
+		//list.addShopNetInList(hypermall);
 
 		// string for creation request for parsing
 		String listOfShops = "";
@@ -47,14 +47,14 @@ public class Controller {
 
 		// take the user's request
 		String askingForRequest = UserInput
-				.inputString("Введите ваш запрос для поиска товара в торговых сетях " + listOfShops + ": ");
+				.inputString("Р’РІРµРґРµС‚РёС‚Рµ РІР°С€ Р·Р°РїСЂРѕСЃ РґР»СЏ РїРѕРёСЃРєР° РІ РјР°РіР°Р·РёРЅР°С… " + listOfShops + ": ");
 
 		// request verification
 		askingForRequest = Validation.validateRequest(askingForRequest);
 
 		Request request = new Request(askingForRequest);
 
-		ConsolePrinter.print("Подождите, Ваш запрос обрабатывается.\n");
+		ConsolePrinter.print("Р’Р°С€ Р·Р°РїСЂРѕСЃ РѕР±СЂР°Р±Р°С‚С‹РІР°РµС‚СЃСЏ.\n");
 
 		// main HashMap to store all the information about product : [shopName : price]
 		HashMap<String, ArrayList<HashMap<String, String>>> resultHashMap = new HashMap<String, ArrayList<HashMap<String, String>>>();
@@ -64,7 +64,7 @@ public class Controller {
 		HashMap<String, ArrayList<String>> hashmapForEquals = new HashMap<String, ArrayList<String>>();
 
 		// search product in 1 shop
-		HashMap<String, String> result = list.getShopList().get(0).searchProduct(request);
+		ArrayList<ArrayList<String>> result = list.getShopList().get(0).searchProduct(request);
 //add information to resultHashMap
 		resultHashMap = HashMapElementsAddition.addElementsToMainResultHashMap(result, resultHashMap, list);
 
