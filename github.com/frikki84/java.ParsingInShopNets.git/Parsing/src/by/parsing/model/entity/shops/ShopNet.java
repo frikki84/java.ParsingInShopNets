@@ -9,11 +9,8 @@ import by.parsing.model.entity.request.Request;
 public abstract class ShopNet {
 	private String shopName;
 	private String mainUrl;
-	
 	private String urlStart;
 	private String urlFinish;
-	
-	
 	private String itemCommon;
 
 
@@ -152,7 +149,6 @@ public abstract class ShopNet {
 	}
 
 	public abstract ArrayList<ArrayList<String>> searchProduct(Request request);
-
 	
 
 }
