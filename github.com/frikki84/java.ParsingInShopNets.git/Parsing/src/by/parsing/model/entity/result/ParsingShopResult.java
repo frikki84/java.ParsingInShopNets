@@ -31,6 +31,15 @@ public class ParsingShopResult {
 		this.link = link;
 		this.shop = shop;
 	}
+	
+	
+
+	public ParsingShopResult(ParsingShopResult p) {
+		this.name = p.name;
+		this.price = p.price;
+		this.link = p.link;
+		this.image = p.image;
+	}
 
 	public String getName() {
 		return name;

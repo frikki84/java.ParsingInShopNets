@@ -17,7 +17,7 @@ public class ControllerTest {
 			
 		OstrovChistoty chistoty = new OstrovChistoty();
 		Edostavka edostavka = new Edostavka();
-		Request request = new Request("Рис пропаренный");
+		Request request = new Request("Colgate White");
 		
 		ShopList shopList = new ShopList();
 		shopList.addShopNetInList(chistoty);
@@ -26,8 +26,7 @@ public class ControllerTest {
 		LinkedList<FinalResultEntity> finalList = new LinkedList<>();
 		
 		finalList = MainResultListCreation.createFinalList(shopList, request);
-		
-		System.out.println(finalList);
+
 		
 		
 		
