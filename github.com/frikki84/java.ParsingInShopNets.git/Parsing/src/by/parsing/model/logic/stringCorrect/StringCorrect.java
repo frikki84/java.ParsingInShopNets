@@ -10,6 +10,7 @@ public class StringCorrect {
             int index = price.indexOf(value);
             price = price.substring(0, index).trim();
         }
+        price = price.replace(",", ".");
         return price;
     }
 
@@ -99,6 +100,7 @@ public class StringCorrect {
         msg = msg.replace("семечки подсолнечника ", "семечки ");
         msg = msg.replace("мыло хозяйственное классическое 72% твердое", "мыло хозяйственное классическое 72%");
         msg = msg.replace("зубная паста colgate optic white мгновенный", "зубная паста colgate optic white");
+        msg = msg.replaceAll("юниор", "junior");
         msg = msg.trim().toUpperCase();
 
         return msg;

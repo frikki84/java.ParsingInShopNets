@@ -8,6 +8,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import by.parsing.model.entity.request.Request;
+import by.parsing.model.entity.result.ParsingShopResult;
 import by.parsing.model.logic.stringCorrect.StringCorrect;
 
 public class Oz extends ShopNet{
@@ -32,9 +33,8 @@ public class Oz extends ShopNet{
 
 
     @Override
-    public ArrayList<ArrayList<String>> searchProduct(Request request) {
-        ArrayList<String> responseContainer = new ArrayList<>();
-        ArrayList<ArrayList<String>> container = new ArrayList<ArrayList<String>>();
+    public ArrayList<ParsingShopResult> searchProduct(Request request) {
+		ArrayList<ParsingShopResult> container = new ArrayList<ParsingShopResult>();
 
         String urlRequest = getUrlStart() + request.getRequest() + getUrlFinish();
         try {
@@ -42,10 +42,10 @@ public class Oz extends ShopNet{
 
             Elements elements = document.select("li[class = " + getItemCommon() + "]");
 
-            String name = "";
-            String price = "";
-            String image = "";
-            String link = "";
+            String name;
+			Double price;
+			String image;
+			String link;
 
             for (Element element : elements) {
                 String itemUrl = getMainUrl() + element.select("div[class = item-type-card__inner] > a").attr("href");
@@ -56,18 +56,18 @@ public class Oz extends ShopNet{
 
 
                 String priceRub = itemDocument.select("div[class = b-product-control__row]").text();
-               
+              
                 if (priceRub.contains(OZ_NO_PRODUCTS)) {
                     continue;
 
                 } else {
-                    //Log.d("PriceOZ", priceRub);
-                    price = StringCorrect.priceRubCorrection(priceRub);
+                    
+                    String midPrice = StringCorrect.priceRubCorrection(priceRub);
+                    price = new Double(midPrice);
+                    
 
                     name = itemName + " " + itemProducer;
-
-                    //Log.d("Log_OZ_name", name);
-
+                    
                     name = StringCorrect.stringCorrectForParsing(name);
 
                     image = itemDocument.select("div[class = b-product-photo__picture-self] " +
@@ -76,17 +76,9 @@ public class Oz extends ShopNet{
                     link = itemUrl;
 
 
-                responseContainer.add(name);
-                responseContainer.add(price);
-                responseContainer.add(image);
-                responseContainer.add(link);
+                    ParsingShopResult result = new ParsingShopResult(name, price, image, link, OZ_NAME);
 
-                ArrayList<String> mArr = new ArrayList<String>();
-                mArr = (ArrayList<String>) responseContainer.clone();
-
-                container.add(mArr);
-
-                responseContainer.clear();
+					container.add(result);
             }
         }
 

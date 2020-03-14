@@ -108,6 +108,7 @@ public class MainResultListCreation {
 				}
 				counter = 0;
 			}
+			finalList = new LinkedList<>(lastFinalList);
 		}
 		return lastFinalList;
 	}
