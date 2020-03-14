@@ -1,8 +1,8 @@
 package by.parsing.model.entity.shops;
 import java.util.ArrayList;
 
-
 import by.parsing.model.entity.request.Request;
+import by.parsing.model.entity.result.ParsingShopResult;
 
 
 
@@ -148,7 +148,7 @@ public abstract class ShopNet {
 		this.itemCommon = itemCommon;
 	}
 
-	public abstract ArrayList<ArrayList<String>> searchProduct(Request request);
+	public abstract ArrayList<ParsingShopResult> searchProduct(Request request);
 	
 
 }

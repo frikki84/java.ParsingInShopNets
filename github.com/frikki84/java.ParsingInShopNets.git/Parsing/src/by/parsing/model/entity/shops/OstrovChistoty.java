@@ -7,6 +7,8 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import by.parsing.model.entity.request.Request;
+import by.parsing.model.entity.result.ParsingShopResult;
+import by.parsing.model.logic.paginator.Paginator;
 import by.parsing.model.logic.stringCorrect.StringCorrect;
 
 public class OstrovChistoty extends ShopNet {
@@ -19,7 +21,7 @@ public class OstrovChistoty extends ShopNet {
 
 	public static final String OCH_ITEM_COMMON = "catalog_item_wrapp";
 
-	public static final int NUMBER_OF_FIRST_PAGE_OF_SEACH = 1;
+	public static final String NUMBER_OF_FIRST_PAGE_OF_SEACH = "1";
 
 	public OstrovChistoty() {
 		super.setUrlStart(OCH_URL_START);
@@ -32,41 +34,24 @@ public class OstrovChistoty extends ShopNet {
 
 	@Override
 	public String toString() {
-		return "OstrovChistoty [toString()=" + super.toString() + ", hashCode()=" + hashCode() + ", getShopName()="
-				+ getShopName() + ", getMainUrl()=" + getMainUrl() + ", getUrlStart()=" + getUrlStart()
-				+ ", getUrlFinish()=" + getUrlFinish() + ", getItemCommon()=" + getItemCommon() + ", getClass()="
-				+ getClass() + "]";
+		return "OstrovChistoty {}";
 	}
 
 	@Override
-	public ArrayList<ArrayList<String>> searchProduct(Request request) {
-		ArrayList<String> responseContainer = new ArrayList<>();
-		ArrayList<ArrayList<String>> container = new ArrayList<ArrayList<String>>();
+	public ArrayList<ParsingShopResult> searchProduct(Request request) {
+		ArrayList<ParsingShopResult> container = new ArrayList<ParsingShopResult>();
 
 		String urlRequest = getUrlStart() + NUMBER_OF_FIRST_PAGE_OF_SEACH + getUrlFinish() + request.getRequest();
 
 		try {
-			// document of 1 search page
-			Document document = Jsoup.connect(urlRequest).get();
+			//find number of search pages found
+			int lastPage = Paginator.findResultsFromAllSearchPages(urlRequest, "",
+					"div[class = module-pagination] > span[class = nums] > a");
 
-			// create container for pages because there's no 1 page on site
-			ArrayList<String> containerForPages = new ArrayList<>();
-			containerForPages.add("1");
-
-			// search all pages with results for search in the shop
-			Elements searchPages = document.select("div[class = module-pagination] > span[class = nums] > a");
-
-			for (Element page : searchPages) {
-				String eachPage = page.text();
-				containerForPages.add(eachPage);
-			}
-
-			for (String pageInContainer : containerForPages) {
+			for (int i = 1; i <= lastPage; i++) {
 
 				// request for each page with results for search in the shop
-				String pagesWithResualtsOfSearch = getUrlStart() + pageInContainer + getUrlFinish()
-						+ request.getRequest();
-
+				String pagesWithResualtsOfSearch = getUrlStart() + i + getUrlFinish() + request.getRequest();
 				// search elements on each page of search
 				Document docEachPage = Jsoup.connect(pagesWithResualtsOfSearch).get();
 
@@ -74,6 +59,7 @@ public class OstrovChistoty extends ShopNet {
 
 				String name;
 				String price;
+				Double doublePrice;
 				String image;
 				String link;
 
@@ -88,18 +74,12 @@ public class OstrovChistoty extends ShopNet {
 
 					price = element.select("div[class = price]").text();
 					price = StringCorrect.priceRubCorrection(price);
+					doublePrice = new Double(price);
 
-					responseContainer.add(name);
-					responseContainer.add(price);
-					responseContainer.add(image);
-					responseContainer.add(link);
+					ParsingShopResult result = new ParsingShopResult(name, doublePrice, image, link, OCH_SHOP_NAME);
 
-					ArrayList<String> mArr = new ArrayList<String>();
-					mArr = (ArrayList<String>) responseContainer.clone();
+					container.add(result);
 
-					container.add(mArr);
-
-					responseContainer.clear();
 				}
 
 			}
@@ -108,7 +88,7 @@ public class OstrovChistoty extends ShopNet {
 			e.printStackTrace();
 		}
 
-		return container;
+		return  container;
 	}
 
 }
