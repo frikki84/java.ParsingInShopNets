@@ -16,15 +16,15 @@ public class MainResultListCreation {
 	 * find first shop in ShopList with request product and add search result to
 	 * final LinkedList<FinalResultEntity>
 	 */
-	public static LinkedList<FinalResultEntity> firstPointInFinalList(ShopList shopList, Request request) {
-		LinkedList<FinalResultEntity> finalList = new LinkedList<>();
+	public static ArrayList<FinalResultEntity> firstPointInFinalList(ShopList shopList, Request request) {
+		ArrayList<FinalResultEntity> finalList = new ArrayList<>();
 
 		ArrayList<ParsingShopResult> mList = new ArrayList<>();
 
 		FinalResultEntity finalEntity = new FinalResultEntity();
 
 		for (ShopNet i : shopList.getShopList()) {
-			if (finalList.equals(new LinkedList<FinalResultEntity>())) {
+			if (finalList.equals(new ArrayList<FinalResultEntity>())) {
 
 				mList = i.searchProduct(request);
 
@@ -51,7 +51,7 @@ public class MainResultListCreation {
 		return finalList;
 	}
 
-	public static ShopList changeShopList(ShopList list, LinkedList<FinalResultEntity> finalList) {
+	public static ShopList changeShopList(ShopList list, ArrayList<FinalResultEntity> finalList) {
 		int index = 0;
 		for (ShopNet shop : list.getShopList()) {
 			if (finalList.get(0).getPriceHash().containsKey(shop.getShopName())) {
@@ -67,11 +67,11 @@ public class MainResultListCreation {
 		return newList;
 	}
 
-	public static LinkedList<FinalResultEntity> upgrateFinalList(ShopList shopList, Request request,
-			LinkedList<FinalResultEntity> finalList) {
+	public static ArrayList<FinalResultEntity> upgrateFinalList(ShopList shopList, Request request,
+			ArrayList<FinalResultEntity> finalList) {
 
 		// main result LinkedList
-		LinkedList<FinalResultEntity> lastFinalList = new LinkedList<>(finalList);
+		ArrayList<FinalResultEntity> lastFinalList = new ArrayList<>(finalList);
 
 		// counter to define if the final list contains value from new shop research
 		// list
@@ -108,16 +108,58 @@ public class MainResultListCreation {
 				}
 				counter = 0;
 			}
-			finalList = new LinkedList<>(lastFinalList);
+			finalList = new ArrayList<>(lastFinalList);
 		}
 		return lastFinalList;
 	}
 
-	public static LinkedList<FinalResultEntity> createFinalList(ShopList shopList, Request request) {
-		LinkedList<FinalResultEntity> list = MainResultListCreation.firstPointInFinalList(shopList, request);
+	public static ArrayList<FinalResultEntity> createFinalList(ShopList shopList, Request request) {
+		ArrayList<FinalResultEntity> list = MainResultListCreation.firstPointInFinalList(shopList, request);
 		ShopList listShop = MainResultListCreation.changeShopList(shopList, list);
-		LinkedList<FinalResultEntity> finalResult = MainResultListCreation.upgrateFinalList(listShop, request, list);
+		ArrayList<FinalResultEntity> finalResult = MainResultListCreation.upgrateFinalList(listShop, request, list);
 		return finalResult;
+	}
+	
+	
+	public static LinkedList<FinalResultEntity> aaaa(ShopNet i, Request request,
+			LinkedList<FinalResultEntity> finalList) {
+
+
+		LinkedList<FinalResultEntity> lastFinalList = new LinkedList<>(finalList);
+int counter = 0;
+			ArrayList<ParsingShopResult> mList = new ArrayList<>();
+			mList = i.searchProduct(request);
+
+			for (ParsingShopResult j : mList) {
+				for (FinalResultEntity f : finalList) {
+					// if product name from final list equals product name from mList
+					if (j.getName().equals(f.getName())) {
+						int index = lastFinalList.indexOf(f);
+						lastFinalList.get(index).getPriceHash().put(j.getShop(), j.getPrice());
+						lastFinalList.get(index).getImageHash().put(j.getShop(), j.getImage());
+						lastFinalList.get(index).getLinkHash().put(j.getShop(), j.getLink());
+					} else {
+						counter += 1;
+					}
+				}
+
+				if (counter == finalList.size()) {
+					HashMap<String, Double> priceHash = new HashMap<>();
+					HashMap<String, String> imageHash = new HashMap<>();
+					HashMap<String, String> linkHash = new HashMap<>();
+
+					priceHash.put(j.getShop(), j.getPrice());
+					imageHash.put(j.getShop(), j.getImage());
+					linkHash.put(j.getShop(), j.getLink());
+
+					FinalResultEntity addEntity = new FinalResultEntity(j.getName(), priceHash, imageHash, linkHash);
+					lastFinalList.add(addEntity);
+				}
+
+			}
+			finalList = new LinkedList<>(lastFinalList);
+		
+		return lastFinalList;
 	}
 
 }
