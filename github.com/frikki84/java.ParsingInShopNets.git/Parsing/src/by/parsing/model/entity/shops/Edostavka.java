@@ -62,7 +62,7 @@ public class Edostavka extends ShopNet {
 
 				String middlePrice = priceRub + "." + priceCent;
 				price = new Double(middlePrice);
-				ParsingShopResult result = new ParsingShopResult(name, price, image, link, EDOSTAVKA_SHOP_NAME);
+				ParsingShopResult result = new ParsingShopResult(name, price, image, link, getShopName());
 				
 				container.add(result);
 

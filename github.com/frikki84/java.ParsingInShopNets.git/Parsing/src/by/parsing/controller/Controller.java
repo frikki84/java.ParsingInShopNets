@@ -9,6 +9,7 @@ import java.util.Map;
 import by.parsing.model.entity.request.Request;
 import by.parsing.model.entity.result.FinalResultEntity;
 import by.parsing.model.entity.shops.Edostavka;
+import by.parsing.model.entity.shops.HitDostavka;
 import by.parsing.model.entity.shops.Hypermall;
 import by.parsing.model.entity.shops.OstrovChistoty;
 import by.parsing.model.entity.shops.Oz;
@@ -29,9 +30,11 @@ public class Controller {
 		Edostavka edostavka = new Edostavka();
 		Hypermall hypermall = new Hypermall();
 		Oz oz = new Oz();
+		HitDostavka hitDostavka = new HitDostavka();	
+		
 
 		ShopList shopList = new ShopList();
-		shopList.addShopNetInList((new ShopNet[] { chistoty, edostavka, hypermall, oz }));
+		shopList.addShopNetInList((new ShopNet[] { chistoty, edostavka, hypermall, oz, hitDostavka }));
 
 		ArrayList<FinalResultEntity> finalList = new ArrayList<>();
 		finalList = MainResultListCreation.createFinalList(shopList, request);
